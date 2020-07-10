@@ -13,7 +13,8 @@ app.use(express.urlencoded({
 }));
 // parse incoming JSON data
 app.use(express.json());
-
+// this middleware creates a virtual path to the static pages, in this case script/html/media/css 
+app.use(express.static('public'));
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -104,6 +105,10 @@ app.get('/api/animals/:id', (req, res) => {
         res.send(404);
     }
 });
+// route to the root directory - This route is used to create the homepage for a server
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 app.post('/api/animals', (req, res) => {
     // req.body is where our incoming content will be
@@ -121,7 +126,7 @@ app.post('/api/animals', (req, res) => {
     }
 
 });
-
+// app listen should always be last
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
